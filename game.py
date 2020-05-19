@@ -1,7 +1,9 @@
 from aiplayer import *
+from player import *
+from gameclasses import *
 
 def setup(countries, countryMap):
-
+    print("Setup started!")
     #Initialise boni
     NA.countries = countries[0:9]
     SA.countries = countries[9:13]
@@ -10,13 +12,16 @@ def setup(countries, countryMap):
     AU.countries = countries[26:30]
     AS.countries = countries[30:42] #41 countries; this is a valid list slice and detects error with the list more easily than simply saying "30:"
 
+    neutral = Player("Neutral",[],[])
     
     for country in countries:
         #Convert the country name strings to the actual countries
         country.adjacent = [countryMap[countryName] for countryName in country.adjacent]
         #Set base amount of armies for all neutral fields
         country.armies = 2
-
+        #Set country owner to Neutral player
+        country.owner = neutral
+    print("Setup completed!")
 
 def attackCountry(countryFrom, attackingArmies, countryTo):
     print(f"Attack from {countryFrom.name} ({countryFrom.owner}) with {attackingArmies} armies on {countryTo} ({countryTo.owner}) with {countryTo.armies} armies")
@@ -132,32 +137,7 @@ def gameTurn(players):
 
         
 
-class Bonus:
-    def __init__(self,name,amount):
-        self.name = name
-        self.amount = amount
-        self.countries = []
 
-    def __repr__(self):
-        return f"Bonus \"{self.name}\"{self.countries}"
-
-
-class Country:
-    def __init__(self,name,adjacentNames):
-        self.name = name
-        self.adjacent = adjacentNames # These are replaced by the real countries in setup
-        self.owner = Player("Neutral",[],[])
-        self.armies = 0 # real value set during startup
-
-    def __repr__(self):
-        return f"Country[{self.name} - {self.owner}({self.armies})]"
-
-class Movement: #Is an attack or transfer depending on what the units on the targeted field belong to
-    def __init__(self,player,countryFrom,countryTo,armies):
-        self.player = player
-        self.countryFrom = countryFrom,
-        self.countryTo = countryTo,
-        self.armies = armies
 
 
 NA = Bonus("North America",5)
@@ -248,16 +228,17 @@ players = [
 #Territories are distributed so that there is either 0 or 1 territory given out (in total) per bonus
 #It is equally likely to get a territory from each bonus, and within that bonus each territory is also equally likely
 
-countryMap["Eastern Australia"].owner = "alpha"
+countryMap["Eastern Australia"].owner = alpha
 countryMap["Eastern Australia"].armies = 4
-countryMap["Northwest Territory"].owner = "alpha"
+countryMap["Northwest Territory"].owner = alpha
 countryMap["Northwest Territory"].armies = 4
 
-countryMap["Peru"].owner = "beta"
+countryMap["Peru"].owner = beta
 countryMap["Peru"].armies = 4
-countryMap["W. Europe"].owner = "beta"
+countryMap["W. Europe"].owner = beta
 countryMap["W. Europe"].armies = 4
 
 gameRunning = True
 while gameRunning:
     gameRunning = gameTurn(players)
+    break

@@ -3,13 +3,14 @@ class Player:
         self.name = name
         self.income = 5
         self.scoreThisTurn = 0
+        self.territoriesCapturedThisTurn = 0
         #The below two fields are references to game variables, not attributes of the player - But it makes sense to save them here rather than to keep passing them in.
         self.allCountries = allCountries
         self.allBoni = allBoni
 
     #Uses the countryList to find all territories belonging to this player
     def getControlledTerritories(self):
-        return [country for country in self.allCountries if country.owner == self.name]
+        return [country for country in self.allCountries if country.owner == self]
 
     def getVisibleTerritories(self):
         visibleTerritories = set()
