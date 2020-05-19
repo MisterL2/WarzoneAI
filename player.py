@@ -2,6 +2,7 @@ class Player:
     def __init__(self,name,allCountries,allBoni):
         self.name = name
         self.income = 5
+        self.scoreThisTurn = 0
         #The below two fields are references to game variables, not attributes of the player - But it makes sense to save them here rather than to keep passing them in.
         self.allCountries = allCountries
         self.allBoni = allBoni
@@ -26,6 +27,9 @@ class Player:
             if self.hasBonus(bonus):
                 newIncome += bonus.amount
         self.income = newIncome
+        score = self.scoreThisTurn + (newIncome - 5)
+        self.scoreThisTurn = 0 #Reset
+        return score
 
     def hasBonus(self, bonus):
         for country in bonus.countries:
@@ -45,6 +49,16 @@ class Player:
         options = self.getControlledTerritories()
         #To do - Make deployment decisions
         return {}
+
+    def armiesKilled(self,amount):
+        pass
+
+    def armiesLost(self,amount):
+        pass
+
+    def countryCaptured(self,country):
+        pass
+
 
     def __repr__(self):
         return f"Player \"{self.name}\" - Income: {self.income}\nTerritories: {self.getControlledTerritories()}"

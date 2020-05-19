@@ -24,12 +24,29 @@ def attackCountry(countryFrom, attackingArmies, countryTo):
     defendingArmies = countryTo.armies
     defenderDeaths = round(attackingArmies*0.6)
     attackerDeaths = round(defendingArmies*0.7)
+
+    attacker = countryFrom.owner
+    defender = countryTo.owner
     
     if defenderDeaths >= countryTo.armies and (attackingArmies - attackerDeaths) >= 1: #All units killed and at least one attacking army remaining
+        #Inform players so they can calculate a score
+        attacker.armiesLost(attackerDeaths)
+        attacker.armiesKilled(countryTo.armies) #All defending armies are killed
+        defender.armiesLost(countryTo.armies)
+        defender.armiesKilled(attackerDeaths)
+        attacker.countryCaptured(countryTo)
+
+        
         countryFrom.armies -= attackingArmies #Remove all armies involved in the successful attack from the original country
         countryTo.armies = (attackingArmies - attackerDeaths)
         countryTo.owner = countryFrom.owner
     else: #Successful defense or tie
+        #Inform players so they can calculate a score
+        attacker.armiesLost(attackerDeaths)
+        attacker.armiesKilled(defenderDeaths)
+        defender.armiesLost(defenderDeaths)
+        attacker.armiesKilled(attackerDeaths)
+        
         countryFrom.armies -= attackerDeaths
         countryTo.armies -= defenderDeaths
 
@@ -100,7 +117,7 @@ def gameTurn(players):
     #Update players
     
     for player in players:
-        player.update()
+        turnScore = player.update()
 
 
     #Check win condition
@@ -129,7 +146,7 @@ class Country:
     def __init__(self,name,adjacentNames):
         self.name = name
         self.adjacent = adjacentNames # These are replaced by the real countries in setup
-        self.owner = "Neutral"
+        self.owner = Player("Neutral",[],[])
         self.armies = 0 # real value set during startup
 
     def __repr__(self):
