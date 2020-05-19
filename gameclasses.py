@@ -21,13 +21,9 @@ class Country:
 class Movement: #Is an attack or transfer depending on what the units on the targeted field belong to
     def __init__(self,player,countryFrom,countryTo,armies):
         self.player = player
-        self.countryFrom = countryFrom,
-        self.countryTo = countryTo,
+        self.countryFrom = countryFrom
+        self.countryTo = countryTo
         self.armies = armies
 
     def __repr__(self):
-        print(self.countryFrom)
-        print(self.player)
-        print(self.countryTo)
-        print(self.armies)
-        #return f"Attack[{self.countryFrom.name} ({self.player.name}) -> {self.countryTo.name} with {self.armies} armies]"
+        return f"Attack[{self.countryTo.name} from {self.countryFrom.name} ({self.player.name}) with {self.armies} armies]"
